@@ -2,34 +2,26 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
+const path = require("path");
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.listen(3000, function(){
-    console.log("port started at 3000")
+    console.log("[heyyyankit] port started at 3000")
 });
 app.get("/", function(req, res){
-    res.send(`
-        <h1>Welcome to the home page</h1>
-        <div style="margin: 10px;">
-        <a href = "/createNote">
-        <button type="button" style="width: 100px; height: 50px;"> Create Note </button>
-        </a>
-        </div>
-        <div style="margin: 10px;">
-        <a href = "/notesList">
-        <button type="button" style="width: 100px; height: 50px;"> Notes List </button>
-        </a>
-        </div>
-        `)
-})
+    res.render("home");
+});
 app.get("/createNote", function(req, res){
     res.render("addNote");
 })
 app.get("/notesList", function(req, res){
     res.render("allNotes", {arr: arr}); // => views/allNotes.ejs
 })
+// for viewNote (single) page, route by id
 app.get("/notes/:id", function(req, res){
 	const id = Number(req.params.id);
 	if (!Number.isInteger(id) || id < 0 || id >= arr.length) {
@@ -38,7 +30,7 @@ app.get("/notes/:id", function(req, res){
 	const note = arr[id];
 	res.render("viewNote", { note: note, id: id });
 })
-var arr = [];   // title and body
+var arr = [];   // title and body obj
 var x;
 var y;
 app.post("/createNote", function(req,res){

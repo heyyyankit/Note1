@@ -1,21 +1,26 @@
-<h1>All Notes</h1>
-        <!-- <p> Html page send with key and value </p> -->
-        <% arr.map((item, index)=>{ %>
-            <h2> Note <%= index+1 %>: <%= item.title %>  </h2>
-            <% if(item.body.length < 40){   %>
-                <p> <%= item.body %> </p>
-            <% } else { %>
-                <p> <%= item.body.substring(0, 40) %>... <a href="/notes/<%= index %>">Read more</a> </p>
-            <% } %>
-        <% })  %>
+<%- include('partials/layoutTop', { pageTitle: 'All Notes', pageStylesheet: 'allNotes.css' }) %>
 
-        <div style="margin: 10px;">
-            <a href="/">
-                <button type="button" style="width: 100px; height: 50px;"> Go to Home </button>
-            </a>
-        </div>
-        <div style="margin: 10px;">
-            <a href="/createNote">
-                <button type="button" style="width: 100px; height: 50px;"> Add Note </button>
-            </a>
-        </div>
+<section class="list">
+	<h1 class="list__title">All Notes</h1>
+	<div class="grid">
+	<% arr.map((item, index)=>{ %>
+		<div class="note">
+			<h2 class="note__title"><span class="muted">#<%= index+1 %>:</span> <%= item.title %></h2>
+			<p class="note__body">
+				<% if(item.body.length < 120){ %>
+					<%= item.body %>
+				<% } else { %>
+					<%= item.body.substring(0, 120) %>...
+					<!-- GET request, route by id -->
+					<a href="/notes/<%= index %>" class="link">Read more</a>
+				<% } %>
+			</p>
+		</div>
+	<% }) %>
+	</div>
+	<div class="list__footer">
+		<a href="/createNote" class="btn btn--primary">Add Note</a>
+	</div>
+</section>
+
+<%- include('partials/layoutBottom') %>

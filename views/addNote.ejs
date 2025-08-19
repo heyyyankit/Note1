@@ -1,16 +1,21 @@
-<p>Add notes</p>
-<form action="/createNote" method="post">
-    <input type="text" name="x" placeholder="Note title">
-    <input type="text" name="y" placeholder="Note body">
-    <button type="submit">Add Note</button>
-</form>
-<div style="margin: 10px;">
-    <a href="/">
-        <button type="button" style="width: 100px; height: 50px;"> Go to Home </button>
-    </a>
-</div>
-<div style="margin: 10px;">
-    <a href="/notesList">
-        <button type="button" style="width: 100px; height: 50px;"> All notes </button>
-    </a>
-</div>
+<%- include('partials/layoutTop', { pageTitle: 'Add Note', pageStylesheet: 'addNote.css' }) %>
+
+<section class="card">
+	<h1 class="card__title">Add a note</h1>
+	<form action="/createNote" method="post" class="form">
+		<label class="form__group">
+			<span class="form__label">Title</span>
+			<input type="text" name="x" placeholder="Note title" class="input" required>
+		</label>
+		<label class="form__group">
+			<span class="form__label">Body</span>
+			<textarea name="y" placeholder="Note body" class="textarea" rows="6" required></textarea>
+		</label>
+		<div class="form__actions">
+			<button type="submit" class="btn btn--primary">Add Note</button>
+			<a href="/notesList" class="btn btn--ghost">All notes</a>
+		</div>
+	</form>
+</section>
+
+<%- include('partials/layoutBottom') %>
