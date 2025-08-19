@@ -28,7 +28,7 @@ app.get("/createNote", function(req, res){
     res.render("addNote");
 })
 app.get("/notesList", function(req, res){
-    res.render("allNotes", {arr: arr});
+    res.render("allNotes", {arr: arr}); // => views/allNotes.ejs
 })
 app.get("/notes/:id", function(req, res){
 	const id = Number(req.params.id);
@@ -49,5 +49,5 @@ app.post("/createNote", function(req,res){
         body: y
     }
     arr.push(note);
-    res.redirect("/createNote")
+    res.redirect("/createNote") // => .get
 })
