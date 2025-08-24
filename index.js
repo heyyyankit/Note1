@@ -1,10 +1,21 @@
 // import express from "express";
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+
+const userRoute = require("./routes/user");
 
 const path = require("path");
 const app = express();
+
+mongoose.connect("mongodb://localhost:27017/noteAppDB").then(() => {
+    console.log("MongoDB connected");
+}).catch((err) => {
+    console.log("MongoDB connection error:", err);
+});
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // for parsing JSON bodies
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
@@ -15,6 +26,9 @@ app.listen(3000, function(){
 app.get("/", function(req, res){
     res.render("home");
 });
+
+app.use("/user", userRoute); // localhost:3000/user/.....
+
 app.get("/createNote", function(req, res){
     res.render("addNote");
 })
@@ -30,6 +44,9 @@ app.get("/notes/:id", function(req, res){
 	const note = arr[id];
 	res.render("viewNote", { note: note, id: id });
 })
+// app.get("/signup", function(req, res){
+//     res.render("signup");
+// });
 var arr = [];   // title and body obj
 var x;
 var y;
