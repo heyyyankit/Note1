@@ -2,10 +2,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
+
 
 const userRoute = require("./routes/user");
 
 const path = require("path");
+const { checkForAuthenticationCookie } = require("./middlewares/authentication");
 const app = express();
 
 mongoose.connect("mongodb://localhost:27017/noteAppDB").then(() => {
@@ -19,12 +22,21 @@ app.use(express.json()); // for parsing JSON bodies
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
+app.use(checkForAuthenticationCookie("token")); // cookie name is token
+
+app.use((req, res, next) => {
+    res.locals.user = req.user || null;     // make user available in all views (no need to pass each time)
+    next();
+});
 
 app.listen(3000, function(){
     console.log("[heyyyankit] port started at 3000")
 });
 app.get("/", function(req, res){
-    res.render("home");
+    res.render("home", {
+        user: req.user // coming from middleware (if logged in)
+    });
 });
 
 app.use("/user", userRoute); // localhost:3000/user/.....

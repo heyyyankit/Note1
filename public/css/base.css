@@ -103,6 +103,14 @@ main.app {
   background: #1f2937;
   color: #e5e7eb;
 }
+.btn--danger {
+  background: #372a7c;
+  opacity: 0.9;
+  color: #e5e7eb;
+}
+.btn--danger:hover {
+  background: #0d024a;
+}
 
 .btn--ghost {
   background: transparent;
