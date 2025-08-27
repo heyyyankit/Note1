@@ -1,16 +1,20 @@
 const {validateToken} = require('../services/authentication');
+const User = require('../models/user');
+
 function checkForAuthenticationCookie(cookieName) {
-    return function(req, res, next) {
+    return async function(req, res, next) {
         const token = req.cookies[cookieName];
         if (!token) {
-            return next();
+            return next();  // user not verified
         }
         try {
-            const user = validateToken(token);
+            const payload = validateToken(token); // payload contains id
+            const user = await User.findById(payload.id);
             req.user = user;
             next();
         } catch (err) {
             next();
         }
-}}
+    }
+}
 module.exports = { checkForAuthenticationCookie };

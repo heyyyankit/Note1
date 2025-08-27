@@ -12,7 +12,7 @@
 				<% } else { %>
 					<%= item.body.substring(0, 120) %>...
 					<!-- GET request, route by id -->
-					<a href="/notes/<%= index %>" class="link">Read more</a>
+					<a href="/notes/<%= item._id %>" class="link">Read more</a>
 				<% } %>
 			</p>
 		</div>
