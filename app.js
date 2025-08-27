@@ -39,7 +39,11 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, function(){
     console.log("[heyyyankit] port started at 3000")
 });
+
 app.get("/", function(req, res){
+    res.redirect("/user/signup");
+});
+app.get("/home", function(req, res){
     res.render("home", {
         user: req.user // coming from middleware (if logged in)
     });
