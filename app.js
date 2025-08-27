@@ -1,3 +1,4 @@
+require('dotenv').config();
 // import express from "express";
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -11,7 +12,8 @@ const path = require("path");
 const { checkForAuthenticationCookie } = require("./middlewares/authentication");
 const app = express();
 
-mongoose.connect("mongodb://localhost:27017/noteAppDB").then(() => {
+// mongoose.connect("mongodb://localhost:27017/noteAppDB").then(() => {
+mongoose.connect(process.env.MONGO_URL).then(() => {
     console.log("MongoDB connected");
 }).catch((err) => {
     console.log("MongoDB connection error:", err);
@@ -33,7 +35,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.listen(3000, function(){
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, function(){
     console.log("[heyyyankit] port started at 3000")
 });
 app.get("/", function(req, res){
