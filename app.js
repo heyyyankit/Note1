@@ -1,10 +1,8 @@
 require('dotenv').config();
-// import express from "express";
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-
 
 const userRoute = require("./routes/user");
 
@@ -12,7 +10,6 @@ const path = require("path");
 const { checkForAuthenticationCookie } = require("./middlewares/authentication");
 const app = express();
 
-// mongoose.connect("mongodb://localhost:27017/noteAppDB").then(() => {
 mongoose.connect(process.env.MONGO_URL).then(() => {
     console.log("MongoDB connected");
 }).catch((err) => {
@@ -41,7 +38,7 @@ app.listen(PORT, function(){
 });
 app.get("/", function(req, res){
     res.render("home", {
-        user: req.user // coming from middleware (if logged in)
+        user: req.user
     });
 });
 
@@ -50,52 +47,6 @@ app.use("/user", userRoute); // localhost:3000/user/.....
 app.get("/createNote", function(req, res){
     res.render("addNote");
 })
-app.post("/createNote", async function(req,res){
-    x = String(req.body.x);
-    y = String(req.body.y);
-    // const note = {
-    //     title: x,
-    //     body: y
-    // }
-    if (!req.user) {
-        return res.redirect("/user/signin");
-    }
-    await Note.create({
-        title: x,
-        body: y,
-        createdBy: req.user._id // for linking note with current user
-    });
-    // arr.push(note);
-    res.redirect("/createNote") // => .get
-})
-
-app.get("/notesList", async function(req, res){
-    // const notes = await Note.find().populate('createdBy', 'name email');
-    if (!req.user) {
-        return res.redirect("/user/signin");
-    }
-    const notes = await Note.find({createdBy: req.user._id}).populate('createdBy', 'name email');
-    res.render("allNotes", {arr: notes}); // => views/allNotes.ejs
-})
-// for viewNote (single) page, route by id
-app.get("/notes/:id", async function(req, res){
-	// const id = Number(req.params.id);
-	// if (!Number.isInteger(id) || id < 0 || id >= arr.length) {
-	// 	return res.status(404).send("Note not found");
-	// }
-	// const note = arr[id];
-    if (!req.user) {
-        return res.redirect("/user/signin");
-    }
-    const note = await Note.findOne({ _id: req.params.id, createdBy: req.user._id }).populate('createdBy', 'name email');
-    if (!note) {
-        return res.status(404).send("Note not found");
-    }
-	res.render("viewNote", { note: note, id: note._id });
-})
-// app.get("/signup", function(req, res){
-//     res.render("signup");
-// });
 var arr = [];   // title and body obj
 var x;
 var y;
@@ -126,12 +77,9 @@ app.get("/notesList", async function(req, res){
     const notes = await Note.find({createdBy: req.user._id}).populate('createdBy', 'name email'); // fetch notes with user details
     res.render("allNotes", {arr: notes}); // => views/allNotes.ejs
 })
-
+// for viewNote (single) page, route by id
 app.get("/notes/:id", async function(req, res){
     // const id = Number(req.params.id);
-    // if (!Number.isInteger(id) || id < 0 || id >= arr.length) {
-    //     return res.status(404).send("Note not found");
-    // }
     // const note = arr[id];
     if (!req.user) {
         return res.redirect("/user/signin");
