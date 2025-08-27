@@ -29,7 +29,7 @@ router.post("/signin", async (req, res) => {
     const token = await User.matchPassword(email, password);
     console.log("User token:", token);
         res.cookie("token", token, { httpOnly: true });
-        res.redirect("/");
+        res.redirect("/home");
     } catch (err) {
         // console.error("Error setting cookie:", err); 
         res.render("signin", { error: "Failed to set authentication cookie." });
