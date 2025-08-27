@@ -1,5 +1,7 @@
 const {createHmac, randomBytes} = require('crypto');
+const { create } = require('domain');
 const { Schema, model } = require('mongoose');
+const { createTokensforUser } = require('../services/authentication');
 // const mongoose = require('mongoose');
 const userSchema = new Schema({
     name: { type: String, required: true }, 
@@ -46,13 +48,15 @@ const user = await this.findOne({ email });
     const storedPassword = user.password;
     const userPassword = createHmac('sha256', salt).update(password).digest('hex');
     // return userPassword == storedPassword;
-    if (userPassword !== storedPassword) {
+    if (userPassword != storedPassword) {
         throw new Error("Incorrect password");
     }
     const userObj = user.toObject();
+    const token = createTokensforUser(userObj);
     delete userObj.password;
     delete userObj.salt;
-    return userObj;
+    // return userObj;
+    return token;
 };
 
 
