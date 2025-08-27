@@ -287,7 +287,7 @@ main.app {
 
 .password-input {
   background: url('/css/Images/image.png') no-repeat center center;
-  background-size: cover; // 358px 193px
+  background-size: cover; /* 358px 193px */
   color: #000;
   padding: 10px; 
   border: 1px solid #334155;
